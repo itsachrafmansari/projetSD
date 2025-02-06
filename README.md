@@ -1,10 +1,4 @@
-<div style="text-align: center;">
-
 # Projet SD : Cours Licence
-
-</div>
-
----
 
 ## Introduction
 
