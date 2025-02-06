@@ -1,0 +1,28 @@
+<mxfile host="65bd71144e">
+    <diagram id="yBpklGODNsp9a0Fqkz_M" name="Page-1">
+        <mxGraphModel dx="1407" dy="670" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="413" pageHeight="291" math="0" shadow="0">
+            <root>
+                <mxCell id="0"/>
+                <mxCell id="1" parent="0"/>
+                <mxCell id="8" value="Project Workflow" style="swimlane;childLayout=stackLayout;horizontal=1;fillColor=default;horizontalStack=1;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=0;strokeColor=default;stackBorder=10;stackSpacing=-12;resizable=1;align=center;points=[];whiteSpace=wrap;html=1;swimlaneFillColor=default;rounded=1;" vertex="1" parent="1">
+                    <mxGeometry x="40" y="40" width="692" height="100" as="geometry"/>
+                </mxCell>
+                <mxCell id="9" value="&amp;nbsp; &amp;nbsp; &amp;nbsp;Data Collection" style="shape=step;perimeter=stepPerimeter;fixedSize=1;points=[];whiteSpace=wrap;html=1;" vertex="1" parent="8">
+                    <mxGeometry x="10" y="33" width="120" height="57" as="geometry"/>
+                </mxCell>
+                <mxCell id="12" value="&amp;nbsp; &amp;nbsp; Data Processing" style="shape=step;perimeter=stepPerimeter;fixedSize=1;points=[];whiteSpace=wrap;html=1;" vertex="1" parent="8">
+                    <mxGeometry x="118" y="33" width="132" height="57" as="geometry"/>
+                </mxCell>
+                <mxCell id="13" value="&amp;nbsp; &amp;nbsp; Key Concepts Extraction" style="shape=step;perimeter=stepPerimeter;fixedSize=1;points=[];whiteSpace=wrap;html=1;" vertex="1" parent="8">
+                    <mxGeometry x="238" y="33" width="172" height="57" as="geometry"/>
+                </mxCell>
+                <mxCell id="14" value="&lt;div style=&quot;&quot;&gt;&lt;span style=&quot;background-color: initial;&quot;&gt;&amp;nbsp; &amp;nbsp; Automatic File Generation&lt;/span&gt;&lt;/div&gt;" style="shape=step;perimeter=stepPerimeter;fixedSize=1;points=[];whiteSpace=wrap;html=1;align=center;" vertex="1" parent="8">
+                    <mxGeometry x="398" y="33" width="180" height="57" as="geometry"/>
+                </mxCell>
+                <mxCell id="15" value="&lt;div style=&quot;&quot;&gt;&lt;/div&gt;&amp;nbsp; &amp;nbsp;Visualization" style="shape=step;perimeter=stepPerimeter;fixedSize=1;points=[];whiteSpace=wrap;html=1;align=center;" vertex="1" parent="8">
+                    <mxGeometry x="566" y="33" width="116" height="57" as="geometry"/>
+                </mxCell>
+            </root>
+        </mxGraphModel>
+    </diagram>
+</mxfile>
