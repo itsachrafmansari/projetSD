@@ -1,0 +1,5 @@
+pymongo
+pymupdf
+python-dotenv
+python-docx
+python-pptx
