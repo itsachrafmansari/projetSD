@@ -1,14 +1,21 @@
-from pymongo.mongo_client import MongoClient
-
+from pymongo import MongoClient
 from AutoRevise.course_extractor.app.config.settings import MONGODB_URI
 
 
-
 def get_mongodb_connection():
+    """
+    Connect to the MongoDB cluster and return the `courses_db` database.
+
+    Returns:
+        Database: The `courses_db` database object.
+    """
+    # Ensure MONGODB_URI is not None or empty
+    if not MONGODB_URI:
+        raise ValueError("MONGODB_URI is not set in the environment variables.")
+
+    # Connect to the MongoDB cluster
     client = MongoClient(MONGODB_URI)
-    # Send a ping to confirm a successful connection
-    try:
-        client.admin.command('ping')
-        print("Pinged your deployment. You successfully connected to MongoDB!")
-    except Exception as e:
-        print(e)
+
+    # Access the `courses_db` database
+    db = client["courses_db"]
+    return db
