@@ -1,16 +1,15 @@
 from AutoRevise.course_extractor.app.db.connector import get_mongodb_connection
 from AutoRevise.course_extractor.app.db.models import CourseDocument
 
-
-def save_course_to_mongodb(course_document):
+def save_courses_to_mongodb(course_documents):
     """
-    Save a CourseDocument object to the `python_courses` collection in the `courses_db` database.
+    Save multiple CourseDocument objects to the `python_courses` collection in the `courses_db` database.
 
     Args:
-        course_document (CourseDocument): The document to save.
+        course_documents (list[CourseDocument]): The list of documents to save.
 
     Returns:
-        ObjectId: The ID of the inserted document.
+        list[ObjectId]: The list of inserted document IDs.
     """
     # Get the MongoDB connection
     db = get_mongodb_connection()
@@ -18,6 +17,11 @@ def save_course_to_mongodb(course_document):
     # Access the `python_courses` collection in the `courses_db` database
     collection = db["python_courses"]
 
-    # Insert the document and return the inserted ID
-    result = collection.insert_one(course_document.to_dict())
-    return result.inserted_id
+    # Convertir chaque objet en dictionnaire
+    documents = [doc.to_dict() for doc in course_documents]
+
+    # Insérer tous les documents en une seule opération
+    if documents:
+        result = collection.insert_many(documents)
+        return result.inserted_ids
+    return []
