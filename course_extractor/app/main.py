@@ -1,8 +1,8 @@
 import os
 
-from AutoRevise.course_extractor.app.db.models import CourseDocument
-from AutoRevise.course_extractor.app.extractors.pdf_extractor import extract_text_from_pdf, download_pdf
-from AutoRevise.course_extractor.app.storage.mongodb_storage import save_course_to_mongodb
+from course_extractor.app.db.models import CourseDocument
+from course_extractor.app.extractors.pdf_extractor import extract_text_from_pdf, download_pdf
+from course_extractor.app.storage.mongodb_storage import save_course_to_mongodb
 
 
 # Example usage

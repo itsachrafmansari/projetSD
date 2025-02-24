@@ -1,5 +1,5 @@
 from pymongo import MongoClient
-from AutoRevise.course_extractor.app.config.settings import MONGODB_URI
+from course_extractor.app.config.settings import MONGODB_URI
 
 
 def get_mongodb_connection():
