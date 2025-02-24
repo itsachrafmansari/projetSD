@@ -35,3 +35,11 @@ class AtlasClient:
 
     def get_many(self, collection_name: str, filters: dict = None, limit: int = 0) -> list[dict]:
         return list(self.db[collection_name].find(filters=filters, limit=limit))
+
+    def update_one(self, collection_name: str, item_id: int, new_data: dict):
+        result = self.db[collection_name].update_one({'_id': item_id}, {'$set': new_data})
+
+        if result.modified_count > 0:
+            log_message(f"Document {item_id} updated successfully.")
+        else:
+            log_message(f"No changes made or document {item_id} was not found.")
