@@ -1,8 +1,14 @@
 import os
 
-from course_extractor.app.db.models import CourseDocument
+from course_extractor.app.storage.database import AtlasClient
+from course_extractor.app.storage.models import CourseDocument
 from course_extractor.app.extractors.pdf_extractor import extract_text_from_pdf, download_pdf
-from course_extractor.app.storage.mongodb_storage import save_course_to_mongodb
+
+# Mongodb SetUp
+MONGODB_URI = os.getenv("MONGODB_URI")
+MONGODB_DB_NAME = os.getenv("MONGODB_DB_NAME")
+MONGODB_COLLECTION_NAME = os.getenv("MONGODB_COLLECTION_NAME")
+mongodb_client = AtlasClient(MONGODB_URI, MONGODB_DB_NAME)
 
 # Liste des URLs des PDFs à traiter
 urls = [
@@ -51,8 +57,7 @@ for url in urls:
 
 # Insérer tous les documents en une seule opération
 if documents:
-    inserted_ids = save_courses_to_mongodb(documents)
+    inserted_ids = mongodb_client.insert_many(MONGODB_COLLECTION_NAME, [doc.to_dict() for doc in documents], ignore_duplicates=True)
     print(f"{len(inserted_ids)} documents insérés avec succès.")
 else:
     print("Aucun document à insérer.")
-   

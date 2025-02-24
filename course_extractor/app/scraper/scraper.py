@@ -1,16 +1,16 @@
 # Importing dependencies ________________________________________________________________________________________________
+import os
 import time
+from datetime import datetime, UTC
 
 import requests
-from dotenv import load_dotenv
-from pymongo import errors
 from requests import Response
+from dotenv import load_dotenv
 
-from course_extractor.app.db.models import CourseDocument
-from course_extractor.app.storage.mongodb_storage import save_course_to_mongodb
-from course_extractor.app.utils.file_utils import sanitize_filename
-from course_extractor.app.utils.logger import log_message
-from course_extractor.app.utils.url_utils import parameterized_url_generator
+from course_extractor.app.storage.database import AtlasClient
+from course_extractor.app.utils.files import sanitize_filename
+from course_extractor.app.utils.logging import log_message
+from course_extractor.app.utils.urls import parameterized_url_generator
 
 # Defining global variables and constants ______________________________________________________________________________
 load_dotenv()  # take environment variables from .env
@@ -20,7 +20,13 @@ API_BASE_URL = "https://www.scribd.com/search/query"
 SEARCH_TERM = "cours de python"  # TODO: Change the search term according to our needs
 LANGS = ["5"]  # 5 for French
 FILE_TYPES = ["pdf"]
-FILE_LENGTH = "1-3"  # Available options are "1-3", "4-100" or "100+"
+FILE_LENGTH = "4-100"  # Available options are "1-3", "4-100" or "100+"
+
+# Mongodb SetUp
+MONGODB_URI = os.getenv("MONGODB_URI")
+MONGODB_DB_NAME = os.getenv("MONGODB_DB_NAME")
+MONGODB_COLLECTION_NAME = os.getenv("MONGODB_COLLECTION_NAME")
+mongodb_client = AtlasClient(MONGODB_URI, MONGODB_DB_NAME)
 
 
 # Defining necessary functions _________________________________________________________________________________________
@@ -40,18 +46,18 @@ def process_scribd_docs_response(response: Response):
 
     # Reconstruct a new list that contains only the fields we want
     processed_docs_data = [
-        CourseDocument(
-            f"{sanitize_filename(doc_data['title'])} ({doc_data["id"]}).pdf",
-            "pdf",
-            {
+        {
+            "_id": doc_data["id"],
+            "file_name": f"{sanitize_filename(doc_data['title'])} ({doc_data["id"]}).pdf",
+            "file_type": "pdf",
+            "metadata": {
                 "title": doc_data["title"],
                 "source": doc_data["reader_url"],
                 "pages": doc_data["pageCount"],
                 "views": doc_data["views"],
             },
-            {},
-            []
-        ) for doc_data in docs_data_list
+            "creation_date": datetime.now(UTC)
+        } for doc_data in docs_data_list
     ]
     return processed_docs_data, json_response["page_count"], json_response["current_page"]
 
@@ -63,7 +69,7 @@ def scraper():
 
     # Iterate through every API page and insert the results into the database
     while True:
-        log_message(f"Scridb Data Fetching | Start of processing {current_page} / {pages_count}")
+        log_message(f"API Scraping | Start of processing page {current_page} / {pages_count}")
         start_time = time.time()
 
         page_response = requests.get(
@@ -75,19 +81,16 @@ def scraper():
         processed_data, pages_count, current_page = process_scribd_docs_response(page_response)
 
         # Insert the new processed data into the database
-        for document in processed_data:
-            try:
-                save_course_to_mongodb(document)
-            except errors.DuplicateKeyError as e:
-                log_message(f"Scridb Data Fetching | Caught the following error while inserting data to the database {e}")
+        mongodb_client.insert_many(MONGODB_COLLECTION_NAME, processed_data, ignore_duplicates=True)
 
         elapsed_time = time.time() - start_time
-        log_message(f"Scridb Data Fetching | End of processing ({elapsed_time:.2f}s) {current_page} / {pages_count}")
+        log_message(f"API Scraping | End of processing page ({elapsed_time:.2f}s) {current_page} / {pages_count}")
 
         # Increment the page counter then check if all pages are parsed
         current_page += 1
         if pages_count is not None and current_page > pages_count:
             break
+
 
 if __name__ == "__main__":
     scraper()
