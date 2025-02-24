@@ -1,9 +1,9 @@
 import os
 import requests
 import fitz  # PyMuPDF
-from AutoRevise.course_extractor.app.db.connector import get_mongodb_connection
-from AutoRevise.course_extractor.app.storage.mongodb_storage import save_courses_to_mongodb
-from AutoRevise.course_extractor.app.db.models import CourseDocument
+from course_extractor.app.db.connector import get_mongodb_connection
+from course_extractor.app.storage.mongodb_storage import save_course_to_mongodb
+from course_extractor.app.db.models import CourseDocument
 
 def download_pdf(url, output_dir="temp_downloads"):
     """Download a PDF from a URL and save it to a temporary directory."""

@@ -1,9 +1,8 @@
 import os
 
-from AutoRevise.course_extractor.app.db.models import CourseDocument
-from AutoRevise.course_extractor.app.extractors.pdf_extractor import extract_text_from_pdf, download_pdf
-from AutoRevise.course_extractor.app.storage.mongodb_storage import save_courses_to_mongodb
-
+from course_extractor.app.db.models import CourseDocument
+from course_extractor.app.extractors.pdf_extractor import extract_text_from_pdf, download_pdf
+from course_extractor.app.storage.mongodb_storage import save_course_to_mongodb
 
 # Liste des URLs des PDFs à traiter
 urls = [
@@ -56,3 +55,4 @@ if documents:
     print(f"{len(inserted_ids)} documents insérés avec succès.")
 else:
     print("Aucun document à insérer.")
+   
